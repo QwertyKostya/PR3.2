@@ -13,7 +13,26 @@ namespace MinMaxCalculator
 
         private void CalculateButton_Click(object sender, RoutedEventArgs e)
         {
-            // Проверка корректности ввода
+            // Сброс предыдущего результата
+            resultText.Text = string.Empty;
+
+            // Проверка на пустые поля
+            if (string.IsNullOrWhiteSpace(num1TextBox.Text) ||
+                string.IsNullOrWhiteSpace(num2TextBox.Text) ||
+                string.IsNullOrWhiteSpace(num3TextBox.Text))
+            {
+                resultText.Text = "Ошибка: заполните все поля!";
+                return;
+            }
+
+            // Проверка выбора операции
+            if (maxRadioButton.IsChecked != true && minRadioButton.IsChecked != true)
+            {
+                resultText.Text = "Ошибка: выберите операцию (максимум/минимум)!";
+                return;
+            }
+
+            // Проверка корректности ввода чисел
             if (!TryParseNumber(num1TextBox.Text, out double num1) ||
                 !TryParseNumber(num2TextBox.Text, out double num2) ||
                 !TryParseNumber(num3TextBox.Text, out double num3))
@@ -35,7 +54,6 @@ namespace MinMaxCalculator
             }
         }
 
-        // Метод для конвертации строки в число с учётом разных форматов
         private bool TryParseNumber(string input, out double result)
         {
             return double.TryParse(
