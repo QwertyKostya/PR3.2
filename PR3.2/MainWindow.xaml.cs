@@ -1,28 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace PR3._2
+namespace MinMaxCalculator
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void CalculateButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Проверка корректности ввода
+            if (!TryParseNumber(num1TextBox.Text, out double num1) ||
+                !TryParseNumber(num2TextBox.Text, out double num2) ||
+                !TryParseNumber(num3TextBox.Text, out double num3))
+            {
+                resultText.Text = "Ошибка: введите корректные числа!";
+                return;
+            }
+
+            // Вычисление результата
+            if (maxRadioButton.IsChecked == true)
+            {
+                double max = Math.Max(Math.Max(num1, num2), num3);
+                resultText.Text = $"Максимум: {max}";
+            }
+            else
+            {
+                double min = Math.Min(Math.Min(num1, num2), num3);
+                resultText.Text = $"Минимум: {min}";
+            }
+        }
+
+        // Метод для конвертации строки в число с учётом разных форматов
+        private bool TryParseNumber(string input, out double result)
+        {
+            return double.TryParse(
+                input,
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out result
+            );
         }
     }
 }
